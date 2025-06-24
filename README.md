@@ -54,7 +54,7 @@ Go to the Run and Debug panel.
 Select Python Debugger: FastAPI and click Start Debugging.
 
 ### 📁 Project Structure
-chan_study/
+```chan_study/
 ├── main.py
 ├── application/
 │   └── services/
@@ -81,6 +81,6 @@ chan_study/
 ├── .vscode/
 │   └── launch.json
 └── README.md
-
+```
 ### 📝 License
 This project is licensed under the MIT License.
