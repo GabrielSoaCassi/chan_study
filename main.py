@@ -8,7 +8,6 @@ app.include_router(thread_controller.router)
 app.include_router(post_controller.router)
 
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
