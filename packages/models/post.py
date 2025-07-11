@@ -1,23 +1,18 @@
+from sqlmodel import Field, Relationship, SQLModel
+from packages.models.thread import Thread
 from datetime import datetime
-from sqlalchemy.orm import Mapped, mapped_column , relationship
-from sqlalchemy import ForeignKey,func
-from packages.models.base import Base
-
-class Post(Base):
-    __tablename__ = "posts"
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    thread_id: Mapped[int] = mapped_column(ForeignKey("threads.id"))
-    content: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now,server_default=func.now())
-    thread: Mapped["Thread"] = relationship("Thread", back_populates="posts", lazy="joined")
 
 
-    def __init__(self,thread_id:int,content:str):
+class Post(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True, index=True)
+    thread_id: int = Field(foreign_key="threads.id")
+    content: str = Field(nullable=False)
+    created_at: datetime = Field(default=datetime.now)
+    thread: Thread = Relationship(back_populates="posts")
+
+    def __init__(self, thread_id: int, content: str):
         self.thread_id = thread_id
         self.content = content
 
     def to_dict(self) -> dict:
-        return {
-            "content": self.content,
-            "created_at": self.created_at
-        }
+        return {"content": self.content, "created_at": self.created_at}

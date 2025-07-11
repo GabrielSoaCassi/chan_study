@@ -1,19 +1,18 @@
 # models.py
-from sqlalchemy import Integer, DateTime, Text,func
-from sqlalchemy.orm import Mapped,mapped_column,relationship
+from sqlmodel import Field, Relationship, SQLModel
 from datetime import datetime
-from packages.models.base import Base
-class Thread(Base):
-    __tablename__ = "threads"
-    id:Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    title:Mapped[str] = mapped_column(Text, nullable=False)
-    created_at:Mapped[datetime] = mapped_column(DateTime, default=datetime.now,server_default=func.now())
-    posts: Mapped[list["Post"]|None] = relationship("Post", order_by="Post.id", back_populates="thread", lazy="joined")
 
-    def __init__(self, title:str):
+
+class Thread(SQLModel, table=True):
+    __tablename__ = "threads"
+    id: int | None = Field(default=None, primary_key=True, index=True)
+    title: str = Field(nullable=False)
+    created_at: datetime = Field(default=datetime.now)
+    posts: list["Post"] | None = Relationship(back_populates="thread")
+
+    def __init__(self, title: str):
         self.title = title
 
-    
     def to_dict(self) -> dict:
         return {
             "id": self.id,
