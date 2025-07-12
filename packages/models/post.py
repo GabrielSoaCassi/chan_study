@@ -7,7 +7,7 @@ class Post(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True, index=True)
     thread_id: int = Field(foreign_key="threads.id")
     content: str = Field(nullable=False)
-    created_at: datetime = Field(default=datetime.now)
+    created_at: datetime|None = Field(default=datetime.now)
     thread: Thread = Relationship(back_populates="posts")
 
     def __init__(self, thread_id: int, content: str):

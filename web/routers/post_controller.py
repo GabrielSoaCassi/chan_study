@@ -12,7 +12,7 @@ def root():
 
 
 @router.post("/posts", status_code=HTTPStatus.CREATED)
-def create_post(post: dict) -> dict:
+def create_post(post: Post) -> dict:
     result = PostService.create_post(post)
     return {"message": "Post created successfully", "post": result}
 

@@ -25,9 +25,9 @@ class PostRepository:
         result = self._session.exec(statement)
         posts = result.all()
         #conta o total de registros
-        count_stmt = select(func.count(),Post).select_from(Post).where(Post.thread_id == thread_id)
+        count_stmt = select(func.count()).select_from(Post).where(Post.thread_id == thread_id)
         count_result = self._session.exec(count_stmt)
-        total = count_result.all()
+        total = count_result.one()
         return {
             "page": page_number,
             "total_pages": (total + quantity - 1) // quantity,
