@@ -1,37 +1,26 @@
-from data.repositories.thread_repository import AsyncThreadRepository, ThreadRepository
-from config.config import create_session,create_async_session
+from data.repositories.thread_repository import ThreadRepository
+from config.config import create_session
 from packages.models.thread import Thread
 
 
 class ThreadService:
-    def __init__(self):
-        self.session = create_session()
-        self.repo = ThreadRepository(self.session)
-    
-    def create_thread(self, thread_data: dict) -> None:
-        if thread_data.get('title',None) in ("",None):
+
+    @classmethod
+    def create_thread(cls, thread_data: Thread) -> None:
+        if thread_data.title in ("", None):
             raise ValueError("title can't be empty or null!")
-        return self.repo.create(Thread(thread_data.get('title',None)))
-    
-    def get_all_threads(self,page_number:int,quantity:int) -> dict:
-        return self.repo.get_all(page_number,quantity)
-    
-    def get_thread_by_id(self,thread_id:int) -> dict:
-        return self.repo.get_by_id(thread_id)
+        with create_session() as session:
+            repo = ThreadRepository(session)
+            return repo.create(thread_data)
 
+    @classmethod
+    def get_all_threads(cls, page_number: int, quantity: int) -> dict:
+        with create_session() as session:
+            repo = ThreadRepository(session)
+            return repo.get_all(page_number, quantity)
 
-class AsyncThreadService:
-    def __init__(self):
-        self.session = create_async_session()
-        self.repo = AsyncThreadRepository(self.session)
-
-    async def create_thread(self, thread_data: dict) -> None:
-        if thread_data.get('title',None) in ("",None):
-            raise ValueError("title can't be empty or null!")
-        return await self.repo.create(Thread(thread_data.get('title',None)))
-    
-    async def get_all_threads(self,page_number:int,quantity:int) -> dict:
-        return await self.repo.get_all(page_number,quantity)
-    
-    async def get_thread_by_id(self,thread_id:int) -> dict:
-        return await self.repo.get_by_id(thread_id)
+    @classmethod
+    def get_thread_by_id(cls, thread_id: int) -> dict:
+        with create_session() as session:
+            repo = ThreadRepository(session)
+            return repo.get_by_id(thread_id)
