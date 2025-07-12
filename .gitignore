@@ -65,7 +65,7 @@ Thumbs.db
 *.log
 
 # Local data
-data/
+
 
 # Ignore secrets/configs (if any)
 *.env
